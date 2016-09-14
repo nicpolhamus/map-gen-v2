@@ -1,0 +1,20 @@
+var Tile;
+(function (Tile) {
+    Tile[Tile["DirtFloor"] = 0] = "DirtFloor";
+    Tile[Tile["DirtWall"] = 1] = "DirtWall";
+    Tile[Tile["StoneFloor"] = 2] = "StoneFloor";
+    Tile[Tile["StoneWall"] = 3] = "StoneWall";
+    Tile[Tile["StoneDoor"] = 4] = "StoneDoor";
+    Tile[Tile["WoodFloor"] = 5] = "WoodFloor";
+    Tile[Tile["WoodWall"] = 6] = "WoodWall";
+    Tile[Tile["WoodDoor"] = 7] = "WoodDoor";
+    Tile[Tile["MetalFloor"] = 8] = "MetalFloor";
+    Tile[Tile["MetalWall"] = 9] = "MetalWall";
+    Tile[Tile["MetalDoor"] = 10] = "MetalDoor";
+    Tile[Tile["WoodChest"] = 11] = "WoodChest";
+    Tile[Tile["StoneChest"] = 12] = "StoneChest";
+    Tile[Tile["MetalChest"] = 13] = "MetalChest";
+    Tile[Tile["Upstairs"] = 14] = "Upstairs";
+    Tile[Tile["Downstairs"] = 15] = "Downstairs";
+})(Tile || (Tile = {}));
+exports.Tile = Tile;
