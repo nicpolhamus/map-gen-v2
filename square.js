@@ -6,12 +6,10 @@ var Square = (function () {
     * @constructs Square
     * @param {number} x
     * @param {number} y
-    * @param {Direction} d
     */
-    function Square(x, y, d) {
+    function Square(x, y) {
         this._x = x;
         this._y = y;
-        this._dir = d;
     }
     Object.defineProperty(Square.prototype, "x", {
         /**
@@ -43,18 +41,18 @@ var Square = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Square.prototype, "dir", {
+    Object.defineProperty(Square.prototype, "tile", {
         /**
         * @function
-        * @desc Getter for direction of Square
+        * @desc Getter for tile type of Square
         */
-        get: function () { return this._dir; },
+        get: function () { return this._tile; },
         /**
         * @function
-        * @param {Direction} val
-        * @desc Setter for direction of Square
+        * @param {Tile} val
+        * @desc Setter for tile type of Square
         */
-        set: function (val) { this._dir = val; },
+        set: function (val) { this._tile = val; },
         enumerable: true,
         configurable: true
     });

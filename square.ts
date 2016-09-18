@@ -1,4 +1,4 @@
-import { Direction } from './Direction';
+import { Tile } from './Tile';
 /**
 * @class
 */
@@ -7,19 +7,16 @@ class Square {
     _x: number;
     /** @prop {number} _y  - y coord of Square */
     _y: number;
-    /** @prop {Direction} _dir  - direction of Square */
-    _dir: Direction;
-
+    /** @prop {Tile} _tile  - tile type of Square */
+    _tile: Tile;
     /**
     * @constructs Square
     * @param {number} x
     * @param {number} y
-    * @param {Direction} d
     */
-    constructor(x: number, y: number, d: Direction) {
+    constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._dir = d;
     }
 
     /**
@@ -46,15 +43,15 @@ class Square {
     set y(val: number) { this._y = val; }
     /**
     * @function
-    * @desc Getter for direction of Square
+    * @desc Getter for tile type of Square
     */
-    get dir() { return this._dir; }
+    get tile() { return this._tile; }
     /**
     * @function
-    * @param {Direction} val
-    * @desc Setter for direction of Square
+    * @param {Tile} val
+    * @desc Setter for tile type of Square
     */
-    set dir(val: Direction) { this._dir = val; }
+    set tile(val: Tile) { this._tile = val; }
 }
 
 export { Square };
