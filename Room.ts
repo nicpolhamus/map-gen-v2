@@ -35,7 +35,7 @@ class Room {
     * @function createRoom
     * @desc Creates a room based off a Direction
     */
-    createRoom() {
+    private createRoom() {
         this._room = Square[this._W*this._L];
         let xS = 0;
         let yS = 0;
