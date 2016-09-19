@@ -101,3 +101,5 @@ class Room {
     */
     get room() { return this._room; }
 }
+
+export { Room };
