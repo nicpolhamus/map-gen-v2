@@ -14,7 +14,8 @@ enum Tile {
     StoneChest,
     MetalChest,
     Upstairs,
-    Downstairs
+    Downstairs,
+    Empty
 }
 
 export { Tile };

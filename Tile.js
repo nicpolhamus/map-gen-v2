@@ -16,5 +16,6 @@ var Tile;
     Tile[Tile["MetalChest"] = 13] = "MetalChest";
     Tile[Tile["Upstairs"] = 14] = "Upstairs";
     Tile[Tile["Downstairs"] = 15] = "Downstairs";
+    Tile[Tile["Empty"] = 16] = "Empty";
 })(Tile || (Tile = {}));
 exports.Tile = Tile;
