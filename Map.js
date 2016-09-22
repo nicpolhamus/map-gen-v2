@@ -1,6 +1,7 @@
 var tile_1 = require('./tile');
 var direction_1 = require('./direction');
 var Room_1 = require('./Room');
+var square_1 = require('./square');
 var random_1 = require('./random');
 var Map = (function () {
     /**
@@ -12,6 +13,7 @@ var Map = (function () {
         /** @member {Number} @desc room percentage, SUBJECT TO CHANGE */
         this._roomAmount = 25;
         this._random = new random_1.Random();
+        this._console = new Console();
         this._w = w;
         this._l = l;
         this._map = [w * l];
@@ -31,14 +33,26 @@ var Map = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+    * @function
+    * @desc Fills the _map with features
+    */
     Map.prototype.createMap = function () {
+        /* Initiate _map to an 'empty' map */
         this.init();
+        /* validation flag for initial room */
         var initialRoom = false;
         while (!initialRoom) {
+            /* Tries to create a room. If the room is valid, then initialRoom
+                is set to true, otherwise initialRoom will be set to false.
+                If initialRoom is set to true, then the loop will end.*/
             initialRoom = this.makeRoom(this._w / 2, this._l / 2, this.randomDirection());
         }
+        /* Once outside of the loop, the room count is 1 */
         var roomCount = 1;
-        for (var tries = 0; tries < 1000; tries++) {
+        /* attempt to generate content over 1000 iterations (this can be changed) */
+        for (var tries = 0, innerTries = 0; tries < 1000; tries++) {
+            /* if room count equals max amount of rooms, breakout of the loop */
             if (roomCount === this._roomAmount) {
                 break;
             }
@@ -47,6 +61,83 @@ var Map = (function () {
             var xmd = 0;
             var y = 0;
             var ymd = 0;
+            var valid = null;
+            /* attempt to create a valid piece of content over 1000 iterations */
+            for (innerTries = 0; innerTries < 1000; innerTries++) {
+                x = this._random.nextInt32([0, 100]);
+                y = this._random.nextInt32([0, 100]);
+                /* Check if index can be utilized (logic here will be modified later)*/
+                if (this._map[x + this._w * y] === tile_1.Tile.DirtWall || this._map[x + this._w * y] === tile_1.Tile.DirtCorridor) {
+                    var surroundings = this.getSurroundings(x, y);
+                    /* check if index can be reached */
+                    var reachable = null;
+                    for (var i = 0; i < surroundings.length; i++) {
+                        /* check if Tile of Square is a floor or corridor
+                            (logic will be modified to include more floor and
+                            corridor types) */
+                        if (surroundings[i][2] === tile_1.Tile.DirtFloor || surroundings[i][2] === tile_1.Tile.DirtCorridor) {
+                            reachable = surroundings[i];
+                            break;
+                        }
+                    }
+                    valid = reachable[1];
+                    /* Setting the coordinate modifiers based on direction of reachable */
+                    switch (reachable[1]) {
+                        case direction_1.Direction.North:
+                            xmd = 0;
+                            ymd = -1;
+                            break;
+                        case direction_1.Direction.East:
+                            xmd = 1;
+                            ymd = 0;
+                            break;
+                        case direction_1.Direction.South:
+                            xmd = 0;
+                            ymd = 1;
+                            break;
+                        case direction_1.Direction.West:
+                            xmd = -1;
+                            ymd = 0;
+                            break;
+                        default:
+                            throw new Error('Direction is invalid');
+                    }
+                    /* check to see if surroundings of entrance for doors, so we
+                        don't have a bunch of Doors around each other*/
+                    if (this.getTile(x, y + 1) === tile_1.Tile.WoodDoor) {
+                        valid = null;
+                    }
+                    else if (this.getTile(x - 1, y) === tile_1.Tile.WoodDoor) {
+                        valid = null;
+                    }
+                    else if (this.getTile(x, y - 1) === tile_1.Tile.WoodDoor) {
+                        valid = null;
+                    }
+                    else if (this.getTile(x + 1, y) === tile_1.Tile.WoodDoor) {
+                        valid = null;
+                    }
+                    /* if the square is still valid, we break out*/
+                    if (typeof valid !== null) {
+                        break;
+                    }
+                }
+                /* we will make a room at the valid square */
+                if (typeof valid !== null) {
+                    /* attemp to make a room at valid square */
+                    if (this.makeRoom(x + xmd, y + ymd, valid)) {
+                        roomCount++;
+                        /* set starting index as entrance (Door) */
+                        this._map[x + this._w * y] = tile_1.Tile.WoodDoor;
+                        /* set the index in front of entrance to a floor tile,
+                            ensuring that we can reach the entrance of the room */
+                        this._map[(x + xmd) + this._w * (y + ymd)] = tile_1.Tile.DirtFloor;
+                    }
+                }
+            }
+            /* Will include a function for adding room content */
+            /* Will include a logger for debugging purposes, for now using
+                Console.log */
+            this._console.log('# of rooms ' + roomCount);
         }
     };
     /**
@@ -73,8 +164,8 @@ var Map = (function () {
         array.
     */
     Map.prototype.makeRoom = function (x, y, dir) {
-        var width = this._random.nextInt32([4, 10]);
-        var length = this._random.nextInt32([4, 10]);
+        var width = this._random.nextInt32([3, 10]);
+        var length = this._random.nextInt32([3, 10]);
         var floor = tile_1.Tile.DirtFloor;
         var Wall = tile_1.Tile.DirtWall;
         var room = new Room_1.Room(x, y, width, length, dir);
@@ -112,7 +203,8 @@ var Map = (function () {
     */
     Map.prototype.isWall = function (x, y, width, length, xpos, ypos, dir) {
         /* For each case, check if index lies on the bounds of the room
-            (bounds are different for each case) */
+            (bounds are different for each case). If the index equals any
+            the bounds, then the index is a wall. */
         switch (dir) {
             case direction_1.Direction.North:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y - length + 1;
@@ -140,6 +232,61 @@ var Map = (function () {
                 return direction_1.Direction.South;
             case 3:
                 return direction_1.Direction.West;
+        }
+    };
+    /**
+    * @function
+    * @param {number} x
+    * @param {number} y
+    * @returns {Array}
+    * @desc Returns an array of 'Tuples' that contains the surroundings that are
+        within the bounds of the Room/Map
+    */
+    Map.prototype.getSurroundings = function (x, y) {
+        /* Sets the surroundings of the index */
+        var surroundings = [
+            [new square_1.Square(x, y + 1), direction_1.Direction.North],
+            [new square_1.Square(x - 1, y), direction_1.Direction.East],
+            [new square_1.Square(x, y - 1), direction_1.Direction.South],
+            [new square_1.Square(x + 1, y), direction_1.Direction.West]
+        ];
+        /* Loops through the surroundings and checks if each index is within
+            the bounds of the Room/map */
+        var surroundingsInBounds = [];
+        for (var i = 0; i < surroundings.length; i++) {
+            var s = surroundings[i][0];
+            if (s.x > 0 && s.x < this._w && s.y > 0 && s.y < this._l) {
+                surroundingsInBounds.push(surroundings[i]);
+            }
+        }
+        /* Sets the Tile for each surrounding index that are within the bounds */
+        var surroundingsWithTiles = [];
+        for (var i = 0; i < surroundingsInBounds.length; i++) {
+            surroundingsWithTiles.push([
+                surroundingsInBounds[i][0],
+                surroundingsInBounds[i][1],
+                /* Gets the Tile */
+                this.getTile(surroundingsInBounds[i][0].x, surroundingsInBounds[i][0].y)
+            ]);
+        }
+        return surroundingsWithTiles;
+    };
+    /**
+    * @function
+    * @param {number} x
+    * @param {number} y
+    * @returns {Tile}
+    * @desc Retrieves the Tile of the specific index in the _map
+    */
+    Map.prototype.getTile = function (x, y) {
+        /* Uses a try-catch to catch an index that is out of range */
+        try {
+            return this._map[x + this._w * y];
+        }
+        catch (e) {
+            if (e instanceof RangeError) {
+                throw new Error(x + ',' + y + ' is out of range');
+            }
         }
     };
     return Map;
