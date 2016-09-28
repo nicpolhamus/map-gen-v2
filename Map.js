@@ -140,12 +140,18 @@ var Map = (function () {
             this._Console.log('# of rooms ' + roomCount);
         }
     };
+    /**
+    * @function
+    * @returns {string}
+    * @desc Override of toString(), returns a string representation of the map
+    */
     Map.prototype.toString = function () {
         var d_string = '';
         for (var y = 0, x = 0; y < this._h; y++) {
             for (x = 0; x < this._w; x++) {
-                d_string += '';
+                d_string += this.GetTileChar(this._map[x + this._w * y]);
             }
+            d_string += '\n';
         }
         return d_string;
     };
@@ -296,6 +302,42 @@ var Map = (function () {
             if (e instanceof RangeError) {
                 throw new Error(x + ',' + y + ' is out of range');
             }
+        }
+    };
+    Map.prototype.GetTileChar = function (t) {
+        switch (t) {
+            case Tile_1.Tile.Empty:
+                return '';
+            case Tile_1.Tile.DirtFloor:
+                return String.fromCharCode(9472);
+            case Tile_1.Tile.DirtWall:
+                return String.fromCharCode(9474);
+            case Tile_1.Tile.DirtCorridor:
+                return String.fromCharCode(9552);
+            case Tile_1.Tile.StoneFloor:
+                return String.fromCharCode(9473);
+            case Tile_1.Tile.StoneWall:
+                return String.fromCharCode(9553);
+            case Tile_1.Tile.StoneDoor:
+                return String.fromCharCode(9547);
+            case Tile_1.Tile.WoodFloor:
+                return String.fromCharCode(9480);
+            case Tile_1.Tile.WoodWall:
+                return String.fromCharCode(9482);
+            case Tile_1.Tile.WoodDoor:
+                return String.fromCharCode(9532);
+            case Tile_1.Tile.MetalFloor:
+                return String.fromCharCode(9549);
+            case Tile_1.Tile.MetalWall:
+                return String.fromCharCode(9551);
+            case Tile_1.Tile.MetalDoor:
+                return String.fromCharCode(9579);
+            case Tile_1.Tile.Upstairs:
+                return String.fromCharCode(8689);
+            case Tile_1.Tile.Downstairs:
+                return String.fromCharCode(8690);
+            default:
+                throw new Error('Invalid index!');
         }
     };
     return Map;

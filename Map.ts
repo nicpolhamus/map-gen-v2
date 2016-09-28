@@ -131,12 +131,18 @@ class Map {
             this._Console.log('# of rooms '+roomCount);
         }
     }
+    /**
+    * @function
+    * @returns {string}
+    * @desc Override of toString(), returns a string representation of the map
+    */
     toString(): string {
         let d_string: string = '';
         for(let y = 0, x = 0; y < this._h; y++) {
             for(x = 0; x < this._w; x++) {
-                d_string += '';
+                d_string += this.GetTileChar(this._map[x+this._w*y]);
             }
+            d_string += '\n';
         }
         return d_string;
     }
@@ -290,6 +296,43 @@ class Map {
             if (e instanceof RangeError) {
                 throw new Error(x+','+y+' is out of range');
             }
+        }
+    }
+
+    private GetTileChar(t: Tile): string {
+        switch (t) {
+            case Tile.Empty:
+                return '';
+            case Tile.DirtFloor:
+                return String.fromCharCode(9472);
+            case Tile.DirtWall:
+                return String.fromCharCode(9474);
+            case Tile.DirtCorridor:
+                return String.fromCharCode(9552);
+            case Tile.StoneFloor:
+                return String.fromCharCode(9473);
+            case Tile.StoneWall:
+                return String.fromCharCode(9553);
+            case Tile.StoneDoor:
+                return String.fromCharCode(9547);
+            case Tile.WoodFloor:
+                return String.fromCharCode(9480);
+            case Tile.WoodWall:
+                return String.fromCharCode(9482);
+            case Tile.WoodDoor:
+                return String.fromCharCode(9532);
+            case Tile.MetalFloor:
+                return String.fromCharCode(9549);
+            case Tile.MetalWall:
+                return String.fromCharCode(9551);
+            case Tile.MetalDoor:
+                return String.fromCharCode(9579);
+            case Tile.Upstairs:
+                return String.fromCharCode(8689);
+            case Tile.Downstairs:
+                return String.fromCharCode(8690);
+            default:
+                throw new Error('Invalid index!');
         }
     }
 }

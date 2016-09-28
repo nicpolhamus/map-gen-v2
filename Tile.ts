@@ -1,6 +1,7 @@
 enum Tile {
     DirtFloor,
     DirtWall,
+    DirtCorridor,
     StoneFloor,
     StoneWall,
     StoneDoor,
