@@ -1,10 +1,10 @@
-import { Tile } from './Tile';
+import { Tile } from './tile';
 import { Direction } from './direction';
-import { Room } from './Room';
+import { Room } from './room';
 import { Square } from './square';
 import { Random } from './random';
 
-class Map {
+export class Map {
     /** @prop {number} _w @desc width of the map */
     private _w: number;
     get W() { return this._w; }
