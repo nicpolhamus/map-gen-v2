@@ -1,6 +1,7 @@
 import { Direction } from './direction';
 import { Square } from './square';
-class Room {
+
+export class Room {
     /** @prop {number} _x   - x coord of Room */
     private _x: number;
     /** @prop {number} _y   - y coord of Room */
@@ -101,5 +102,3 @@ class Room {
     */
     get room() { return this._room; }
 }
-
-export { Room };
