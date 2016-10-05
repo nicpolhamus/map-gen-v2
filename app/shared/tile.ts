@@ -1,4 +1,4 @@
-enum Tile {
+export enum Tile {
     DirtFloor,
     DirtWall,
     DirtCorridor,
@@ -18,5 +18,3 @@ enum Tile {
     Downstairs,
     Empty
 }
-
-export { Tile };
