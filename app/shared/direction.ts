@@ -1,4 +1,4 @@
-enum Direction {
+export enum Direction {
   North,
   Northeast,
   East,
@@ -8,5 +8,3 @@ enum Direction {
   West,
   Northwest
 }
-
-export { Direction };
