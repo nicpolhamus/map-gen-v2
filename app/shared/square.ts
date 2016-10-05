@@ -1,8 +1,8 @@
-import { Tile } from './Tile';
+import { Tile } from './tile';
 /**
 * @class
 */
-class Square {
+export class Square {
     /** @prop {number} _x  - x coord of Square */
     _x: number;
     /** @prop {number} _y  - y coord of Square */
@@ -53,5 +53,3 @@ class Square {
     */
     set tile(val: Tile) { this._tile = val; }
 }
-
-export { Square };
