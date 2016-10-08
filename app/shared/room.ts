@@ -29,6 +29,7 @@ export class Room {
         this._W = w;
         this._L = l;
         this._dir = d;
+        this._room = new Array<Square>(0);
         this.createRoom();
     }
 
@@ -37,13 +38,12 @@ export class Room {
     * @desc Creates a room based off a Direction
     */
     private createRoom() {
-        this._room = Square[this._W*this._L];
         let xS = 0;
         let yS = 0;
         switch(this._dir) {
             case this._dir = Direction.North:
                 for(xS = this.getLowerBounds(this._x,this._W); xS < this.getUpperBounds(this._x,this._W); xS++) {
-                    for(yS = this._y; yS < this._y-this._L; yS++) {
+                    for(yS = this._y; yS > this._y-this._L; yS--) {
                         this._room.push(new Square(xS,yS));
                     }
                 }
@@ -63,7 +63,7 @@ export class Room {
                 }
                 break;
             case this._dir = Direction.West:
-                for(xS = this._x; xS < this._x-this._W; xS++) {
+                for(xS = this._x; xS > this._x-this._W; xS--) {
                     for(yS = this.getLowerBounds(this._y,this._L); yS < this.getUpperBounds(this._y,this._L); yS++) {
                         this._room.push(new Square(xS,yS));
                     }
