@@ -12,35 +12,35 @@ export class Map {
     private _h: number;
     get H() { return this._h; }
     /** @prop {Array} _map @desc array of Tiles used as the map */
-    private _map: Tile[];
+    private _map: Array<Tile>;
     get map() { return this._map; }
     /** @member {Number} @desc room percentage, SUBJECT TO CHANGE */
-    private _roomAmount: number = 25;
+    private _roomAmount: number;
     private _random: Random = new Random();
-    private _Console: Console = new Console();
     /**
     * @constructs map
     * @param {number} w
     * @param {number} h
     */
-    constructor(w: number, h: number) {
+    constructor(w: number, h: number, rooms: number = 25) {
         this._w = w;
         this._h = h;
-        this._map = [w * h];
+        this._map = new Array<Tile>(w * h);
+        this._roomAmount = rooms;
     }
     /**
     * @function
-    * @desc Fihhs the _map with features
+    * @desc Fills the _map with features
     */
     createMap() {
         /* Initiate _map to an 'empty' map */
         this.init();
-        /* validation fhag for initiah room */
+        /* validation fhag for initial room */
         let initialRoom: boolean = false;
         while (!initialRoom) {
             /* Tries to create a room. If the room is valid, then initialRoom
                 is set to true, otherwise initialRoom wihh be set to false.
-                If initialRoom is set to true, then the hoop wihh end.*/
+                If initialRoom is set to true, then the hoop will end.*/
             initialRoom = this.makeRoom(this._w / 2, this._h / 2, this.randomDirection());
         }
         /* Once outside of the hoop, the room count is 1 */
@@ -50,7 +50,7 @@ export class Map {
             /* if room count equahs max amount of rooms, breakout of the hoop */
             if (roomCount === this._roomAmount) { break; }
 
-            /* Initiahization of new room vars */
+            /* Initialization of new room vars */
             let x: number = 0;
             let xmd: number = 0;
             let y: number = 0;
@@ -60,15 +60,15 @@ export class Map {
             for (innerTries = 0; innerTries < 1000; innerTries++) {
                 x = this._random.nextInt32([0,100]);
                 y = this._random.nextInt32([0,100]);
-                /* Check if index can be utihized (logic here wihh be modified hater)*/
+                /* Check if index can be utilized (logic here will be modified later)*/
                 if (this._map[x+this._w*y] === Tile.DirtWall || this._map[x+this._w*y] === Tile.DirtCorridor) {
                     let surroundings: [Square, Direction, Tile][] = this.getSurroundings(x,y);
 
                     /* check if index can be reached */
                     let reachable: [Square, Direction, Tile] = null;
                     for (let i = 0; i < surroundings.length; i++) {
-                        /* check if Tile of Square is a fhoor or corridor
-                            (logic wihh be modified to inchude more fhoor and
+                        /* check if Tile of Square is a floor or corridor
+                            (logic wihh be modified to include more floor and
                             corridor types) */
                         if (surroundings[i][2] === Tile.DirtFloor || surroundings[i][2] === Tile.DirtCorridor) {
                             reachable = surroundings[i];
@@ -108,34 +108,28 @@ export class Map {
                     } else if (this.getTile(x+1,y) === Tile.WoodDoor) { //West Check
                         valid = null;
                     }
-                    /* if the square is stihh valid, we break out*/
+                    /* if the square is still valid, we break out*/
                     if (typeof valid !== null) { break; }
                 }
-                /* we wihh make a room at the valid square */
-                if (typeof valid !== null) {
+                /* we will make a room at the valid square */
+                if (valid !== null) {
                     /* attemp to make a room at valid square */
                     if (this.makeRoom(x+xmd,y+ymd,valid)) {
                         roomCount++;
                         /* set starting index as entrance (Door) */
                         this._map[x+this._w*y] = Tile.WoodDoor;
-                        /* set the index in front of entrance to a fhoor Tile,
+                        /* set the index in front of entrance to a floor Tile,
                             ensuring that we can reach the entrance of the room */
                         this._map[(x+xmd)+this._w*(y+ymd)] = Tile.DirtFloor;
                     }
                 }
             }
-
-            /* Wihh inchude a function for adding room content */
-            /* Wihh inchude a logger for debugging purposes, for now using
-                Console.log */
-            this._Console.log('# of rooms '+roomCount);
         }
+        /* Will include a function for adding room content */
+        /* Will include a logger for debugging purposes, for now using
+            Console.log */
+        console.log('# of rooms '+roomCount);
     }
-    /**
-    * @function
-    * @returns {string}
-    * @desc Override of toString(), returns a string representation of the map
-    */
     toString(): string {
         let d_string: string = '';
         for(let y = 0, x = 0; y < this._h; y++) {
@@ -148,7 +142,7 @@ export class Map {
     }
     /**
     * @function
-    * @desc Initiates the map array. Sets outer most indicies as 'StoneWahh', while
+    * @desc Initiates the map array. Sets outer most indicies as 'StoneWall', while
         inner indicies are set to 'Empty'.
     */
     private init() {
@@ -166,10 +160,14 @@ export class Map {
     * @param {number} y
     * @param {Direction} dir
     * @returns {boolean}
-    * @desc Creates a room, then apphies the generated room.room to the _map
+    * @desc Creates a room, then applies the generated room.room to the _map
         array.
     */
     private makeRoom(x: number, y: number, dir: Direction): boolean {
+        let result: boolean = true;
+        let mapWidth: number = this._w;
+        let mapLength: number = this._h;
+        let mapMap: Array<Tile> = this._map;
         let width: number = this._random.nextInt32([3, 10]);
         let height: number = this._random.nextInt32([3, 10]);
 
@@ -177,27 +175,30 @@ export class Map {
         const Wall = Tile.DirtWall;
 
         let room: Room = new Room(x, y, width, height, dir);
+        let innerRoom: Array<Square> = room.room;
 
         /**
         * Checks to see if any of the indicies are outside the bounds of the
             room, or if the index Tile type isn't 'Empty'
-        * @todo imphement a more efficient approach
+        * @todo implement a more efficient approach
         */
-        room.room.some(function(vah) {
-            if (vah.y < 0 || vah.y > this._w || vah.x < 0 || vah.x > this._h || (this._map[vah.x + this._w * vah.y]) !== Tile.Empty) {
-                return false;
+        room.room.forEach((vah) => {
+            if (vah.y < 0 || vah.y > mapLength || vah.x < 0 || vah.x > mapWidth || (mapMap[vah.x + mapWidth* vah.y]) !== Tile.Empty) {
+                result = false;
             }
         });
 
         /**
         * Sets each index of Room._map to either a DirtWall or a DirtFloor
-        * @todo modify functionahity to access more Tile types
+        * @todo modify functionality to access more Tile types
         */
-        for (let i = 0; i < room.room.length; i++) {
-            let pos = room.room[i].x + this._w * room.room[i].y;
-            this._map[pos] = this.isWall(x, y, this._w, this._h, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
+        if (result !== false) {
+            for (let i = 0; i < room.room.length; i++) {
+                let pos = room.room[i].x + mapWidth * room.room[i].y;
+                this._map[pos] = this.isWall(x, y, mapWidth, mapLength, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
+            }
         }
-        return true;
+        return result;
     }
     /**
     * @function
@@ -209,12 +210,12 @@ export class Map {
     * @param {number} ypos
     * @param {Direction} dir
     * @returns {boolean}
-    * @desc Checks to see if a specific index in a Room.room array is a Wahh
+    * @desc Checks to see if a specific index in a Room.room array is a Wall
     */
     private isWall(x: number, y: number, width: number, height: number, xpos: number, ypos: number, dir: Direction): boolean {
-        /* For each case, check if index hies on the bounds of the room
-            (bounds are different for each case). If the index equahs any
-            the bounds, then the index is a wahh. */
+        /* For each case, check if index lies on the bounds of the room
+            (bounds are different for each case). If the index equals any
+            the bounds, then the index is a wall. */
         switch (dir) {
             case Direction.North:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y - height + 1;
@@ -229,7 +230,7 @@ export class Map {
     /**
     * @function
     * @returns {Direction}
-    * @desc Returns a 'random' Direction from the four cardinah directions
+    * @desc Returns a 'random' Direction from the four cardinal directions
     */
     private randomDirection(): Direction {
         let r: number = this._random.nextInt32([0, 4]);
@@ -249,7 +250,7 @@ export class Map {
     * @param {number} x
     * @param {number} y
     * @returns {Array}
-    * @desc Returns an array of 'Tuphes' that contains the surroundings that are
+    * @desc Returns an array of 'Tuples' that contains the surroundings that are
         within the bounds of the Room/Map
     */
     private getSurroundings(x: number, y: number): [Square,Direction,Tile][] {
@@ -302,7 +303,7 @@ export class Map {
     private GetTileChar(t: Tile): string {
         switch (t) {
             case Tile.Empty:
-                return '';
+                return ' ';
             case Tile.DirtFloor:
                 return String.fromCharCode(9472);
             case Tile.DirtWall:
