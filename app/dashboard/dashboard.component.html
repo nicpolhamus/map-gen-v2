@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <div class="card text-xs-center">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm-2 offset-sm-2">
+                    <button type="button" class="btn btn-primary" (click)="generateMap(this.length,this.width,this.rooms)">
+                        Generate Map
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="length-addon">
+                            Map Length
+                        </span>
+                        <input type="text" class="form-control" [(ngModel)]="length"
+                            placeholder="20" aria-describedby="length-addon">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="width-addon">
+                            Map Width
+                        </span>
+                        <input type="text" class="form-control" [(ngModel)]="width"
+                            placeholder="80" aria-describedby="width-addon">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="rooms-addon">
+                            Amount of Rooms
+                        </span>
+                        <input type="text" class="form-control" [(ngModel)]="rooms"
+                            placeholder="25" aria-describedby="rooms-addon">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-block">
+            <h4 class="card-text">Text!</h4>
+        </div>
+    </div>
+</div>
