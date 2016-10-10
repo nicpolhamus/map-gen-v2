@@ -1,4 +1,4 @@
-var Direction;
+"use strict";
 (function (Direction) {
     Direction[Direction["North"] = 0] = "North";
     Direction[Direction["Northeast"] = 1] = "Northeast";
@@ -8,5 +8,6 @@ var Direction;
     Direction[Direction["Southwest"] = 5] = "Southwest";
     Direction[Direction["West"] = 6] = "West";
     Direction[Direction["Northwest"] = 7] = "Northwest";
-})(Direction || (Direction = {}));
-exports.Direction = Direction;
+})(exports.Direction || (exports.Direction = {}));
+var Direction = exports.Direction;
+//# sourceMappingURL=direction.js.map

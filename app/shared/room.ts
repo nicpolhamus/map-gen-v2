@@ -40,32 +40,32 @@ export class Room {
     private createRoom() {
         let xS = 0;
         let yS = 0;
-        switch(this._dir) {
+        switch (this._dir) {
             case this._dir = Direction.North:
-                for(xS = this.getLowerBounds(this._x,this._W); xS < this.getUpperBounds(this._x,this._W); xS++) {
-                    for(yS = this._y; yS > this._y-this._L; yS--) {
-                        this._room.push(new Square(xS,yS));
+                for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
+                    for (yS = this._y; yS > this._y - this._L - 1; yS--) {
+                        this._room.push(new Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = Direction.East:
-                for(xS = this._x; xS < this._x+this._W; xS++) {
-                    for(yS = this.getLowerBounds(this._y,this._L); yS < this.getUpperBounds(this._y,this._L); yS++) {
-                        this._room.push(new Square(xS,yS));
+                for (xS = this._x; xS < this._x + this._W + 1; xS++) {
+                    for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
+                        this._room.push(new Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = Direction.South:
-                for(xS = this.getLowerBounds(this._x,this._W); xS < this.getUpperBounds(this._x,this._W); xS++) {
-                    for(yS = this._y; yS < this._y+this._L; yS++) {
-                        this._room.push(new Square(xS,yS));
+                for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
+                    for (yS = this._y; yS < this._y + this._L + 1; yS++) {
+                        this._room.push(new Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = Direction.West:
-                for(xS = this._x; xS > this._x-this._W; xS--) {
-                    for(yS = this.getLowerBounds(this._y,this._L); yS < this.getUpperBounds(this._y,this._L); yS++) {
-                        this._room.push(new Square(xS,yS));
+                for (xS = this._x; xS > this._x - this._W - 1; xS--) {
+                    for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
+                        this._room.push(new Square(xS, yS));
                     }
                 }
                 break;
@@ -92,7 +92,7 @@ export class Room {
     * @desc Gets upper bound of room
     */
     private getUpperBounds(i: number, len: number): number {
-        return i + len / 2;
+        return i + (len + 1) / 2;
     }
 
     /**

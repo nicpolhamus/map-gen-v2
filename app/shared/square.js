@@ -1,3 +1,4 @@
+"use strict";
 /**
 * @class
 */
@@ -59,3 +60,4 @@ var Square = (function () {
     return Square;
 }());
 exports.Square = Square;
+//# sourceMappingURL=square.js.map

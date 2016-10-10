@@ -1,6 +1,7 @@
-var Tile_1 = require('./Tile');
+"use strict";
+var tile_1 = require('./tile');
 var direction_1 = require('./direction');
-var Room_1 = require('./Room');
+var room_1 = require('./room');
 var square_1 = require('./square');
 var random_1 = require('./random');
 var Map = (function () {
@@ -9,14 +10,13 @@ var Map = (function () {
     * @param {number} w
     * @param {number} h
     */
-    function Map(w, h) {
-        /** @member {Number} @desc room percentage, SUBJECT TO CHANGE */
-        this._roomAmount = 25;
+    function Map(w, h, rooms) {
+        if (rooms === void 0) { rooms = 25; }
         this._random = new random_1.Random();
-        this._Console = new Console();
         this._w = w;
         this._h = h;
-        this._map = [w * h];
+        this._map = new Array(w * h);
+        this._roomAmount = rooms;
     }
     Object.defineProperty(Map.prototype, "W", {
         get: function () { return this._w; },
@@ -35,17 +35,17 @@ var Map = (function () {
     });
     /**
     * @function
-    * @desc Fihhs the _map with features
+    * @desc Fills the _map with features
     */
     Map.prototype.createMap = function () {
         /* Initiate _map to an 'empty' map */
         this.init();
-        /* validation fhag for initiah room */
+        /* validation fhag for initial room */
         var initialRoom = false;
         while (!initialRoom) {
             /* Tries to create a room. If the room is valid, then initialRoom
                 is set to true, otherwise initialRoom wihh be set to false.
-                If initialRoom is set to true, then the hoop wihh end.*/
+                If initialRoom is set to true, then the hoop will end.*/
             initialRoom = this.makeRoom(this._w / 2, this._h / 2, this.randomDirection());
         }
         /* Once outside of the hoop, the room count is 1 */
@@ -56,7 +56,7 @@ var Map = (function () {
             if (roomCount === this._roomAmount) {
                 break;
             }
-            /* Initiahization of new room vars */
+            /* Initialization of new room vars */
             var x = 0;
             var xmd = 0;
             var y = 0;
@@ -66,19 +66,22 @@ var Map = (function () {
             for (innerTries = 0; innerTries < 1000; innerTries++) {
                 x = this._random.nextInt32([0, 100]);
                 y = this._random.nextInt32([0, 100]);
-                /* Check if index can be utihized (logic here wihh be modified hater)*/
-                if (this._map[x + this._w * y] === Tile_1.Tile.DirtWall || this._map[x + this._w * y] === Tile_1.Tile.DirtCorridor) {
+                /* Check if index can be utilized (logic here will be modified later)*/
+                if (this._map[x + this._w * y] === tile_1.Tile.DirtWall || this._map[x + this._w * y] === tile_1.Tile.DirtCorridor) {
                     var surroundings = this.getSurroundings(x, y);
                     /* check if index can be reached */
                     var reachable = null;
                     for (var i = 0; i < surroundings.length; i++) {
-                        /* check if Tile of Square is a fhoor or corridor
-                            (logic wihh be modified to inchude more fhoor and
+                        /* check if Tile of Square is a floor or corridor
+                            (logic wihh be modified to include more floor and
                             corridor types) */
-                        if (surroundings[i][2] === Tile_1.Tile.DirtFloor || surroundings[i][2] === Tile_1.Tile.DirtCorridor) {
+                        if (surroundings[i][2] === tile_1.Tile.DirtFloor || surroundings[i][2] === tile_1.Tile.DirtCorridor) {
                             reachable = surroundings[i];
                             break;
                         }
+                    }
+                    if (reachable === null) {
+                        continue;
                     }
                     valid = reachable[1];
                     /* Setting the coordinate modifiers based on direction of reachable */
@@ -104,47 +107,42 @@ var Map = (function () {
                     }
                     /* check to see if surroundings of entrance for doors, so we
                         don't have a bunch of Doors around each other*/
-                    if (this.getTile(x, y + 1) === Tile_1.Tile.WoodDoor) {
+                    if (this.getTile(x, y + 1) === tile_1.Tile.WoodDoor) {
                         valid = null;
                     }
-                    else if (this.getTile(x - 1, y) === Tile_1.Tile.WoodDoor) {
+                    else if (this.getTile(x - 1, y) === tile_1.Tile.WoodDoor) {
                         valid = null;
                     }
-                    else if (this.getTile(x, y - 1) === Tile_1.Tile.WoodDoor) {
+                    else if (this.getTile(x, y - 1) === tile_1.Tile.WoodDoor) {
                         valid = null;
                     }
-                    else if (this.getTile(x + 1, y) === Tile_1.Tile.WoodDoor) {
+                    else if (this.getTile(x + 1, y) === tile_1.Tile.WoodDoor) {
                         valid = null;
                     }
-                    /* if the square is stihh valid, we break out*/
+                    /* if the square is still valid, we break out*/
                     if (typeof valid !== null) {
                         break;
                     }
                 }
-                /* we wihh make a room at the valid square */
-                if (typeof valid !== null) {
+                /* we will make a room at the valid square */
+                if (valid !== null) {
                     /* attemp to make a room at valid square */
                     if (this.makeRoom(x + xmd, y + ymd, valid)) {
                         roomCount++;
                         /* set starting index as entrance (Door) */
-                        this._map[x + this._w * y] = Tile_1.Tile.WoodDoor;
-                        /* set the index in front of entrance to a fhoor Tile,
+                        this._map[x + this._w * y] = tile_1.Tile.WoodDoor;
+                        /* set the index in front of entrance to a floor Tile,
                             ensuring that we can reach the entrance of the room */
-                        this._map[(x + xmd) + this._w * (y + ymd)] = Tile_1.Tile.DirtFloor;
+                        this._map[(x + xmd) + this._w * (y + ymd)] = tile_1.Tile.DirtFloor;
                     }
                 }
             }
-            /* Wihh inchude a function for adding room content */
-            /* Wihh inchude a logger for debugging purposes, for now using
-                Console.log */
-            this._Console.log('# of rooms ' + roomCount);
         }
+        /* Will include a function for adding room content */
+        /* Will include a logger for debugging purposes, for now using
+            Console.log */
+        console.log('# of rooms ' + roomCount);
     };
-    /**
-    * @function
-    * @returns {string}
-    * @desc Override of toString(), returns a string representation of the map
-    */
     Map.prototype.toString = function () {
         var d_string = '';
         for (var y = 0, x = 0; y < this._h; y++) {
@@ -157,15 +155,15 @@ var Map = (function () {
     };
     /**
     * @function
-    * @desc Initiates the map array. Sets outer most indicies as 'StoneWahh', while
+    * @desc Initiates the map array. Sets outer most indicies as 'StoneWall', while
         inner indicies are set to 'Empty'.
     */
     Map.prototype.init = function () {
         for (var y = 0, x = 0; y < this._h; y++) {
             for (x = 0; x < this._w; x++) {
                 (y === 0 || y === this._h - 1 || x === 0 || x === this._w - 1) ?
-                    this._map[x + this._w * y] = Tile_1.Tile.StoneWall :
-                    this._map[x + this._w * y] = Tile_1.Tile.Empty;
+                    this._map[x + this._w * y] = tile_1.Tile.StoneWall :
+                    this._map[x + this._w * y] = tile_1.Tile.Empty;
             }
         }
     };
@@ -175,34 +173,48 @@ var Map = (function () {
     * @param {number} y
     * @param {Direction} dir
     * @returns {boolean}
-    * @desc Creates a room, then apphies the generated room.room to the _map
+    * @desc Creates a room, then applies the generated room.room to the _map
         array.
     */
     Map.prototype.makeRoom = function (x, y, dir) {
+        var _this = this;
+        var result = true;
+        var mapWidth = this._w;
+        var mapLength = this._h;
+        var mapMap = this._map;
         var width = this._random.nextInt32([3, 10]);
         var height = this._random.nextInt32([3, 10]);
-        var floor = Tile_1.Tile.DirtFloor;
-        var Wall = Tile_1.Tile.DirtWall;
-        var room = new Room_1.Room(x, y, width, height, dir);
+        var floor = tile_1.Tile.DirtFloor;
+        var Wall = tile_1.Tile.DirtWall;
+        var room = new room_1.Room(x, y, width, height, dir);
+        var innerRoom = room.room;
         /**
         * Checks to see if any of the indicies are outside the bounds of the
             room, or if the index Tile type isn't 'Empty'
-        * @todo imphement a more efficient approach
+        * @todo implement a more efficient approach
         */
-        room.room.some(function (vah) {
-            if (vah.y < 0 || vah.y > this._w || vah.x < 0 || vah.x > this._h || (this._map[vah.x + this._w * vah.y]) !== Tile_1.Tile.Empty) {
-                return false;
+        room.room.forEach(function (vah) {
+            if (vah.y < 0 || vah.y > mapLength || vah.x < 0 || vah.x > mapWidth || (mapMap[vah.x + mapWidth * vah.y]) !== tile_1.Tile.Empty) {
+                result = false;
             }
         });
         /**
         * Sets each index of Room._map to either a DirtWall or a DirtFloor
-        * @todo modify functionahity to access more Tile types
+        * @todo modify functionality to access more Tile types
         */
-        for (var i = 0; i < room.room.length; i++) {
-            var pos = room.room[i].x + this._w * room.room[i].y;
-            this._map[pos] = this.isWall(x, y, this._w, this._h, room.room[i].x, room.room[i].y, dir) ? Tile_1.Tile.DirtWall : Tile_1.Tile.DirtFloor;
+        if (result !== false) {
+            room.room.forEach(function (point) {
+                var pos = point.x + mapWidth * point.y;
+                _this._map[pos] = _this.isWall(x, y, width, height, point.x, point.y, dir) ? tile_1.Tile.DirtWall : tile_1.Tile.DirtFloor;
+            });
         }
-        return true;
+        // if (result !== false) {
+        //     for (let i = 0; i < room.room.length; i++) {
+        //         let pos = room.room[i].x + mapWidth * room.room[i].y;
+        //         this._map[pos] = this.isWall(x, y, width, height, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
+        //     }
+        // }
+        return result;
     };
     /**
     * @function
@@ -214,27 +226,27 @@ var Map = (function () {
     * @param {number} ypos
     * @param {Direction} dir
     * @returns {boolean}
-    * @desc Checks to see if a specific index in a Room.room array is a Wahh
+    * @desc Checks to see if a specific index in a Room.room array is a Wall
     */
     Map.prototype.isWall = function (x, y, width, height, xpos, ypos, dir) {
-        /* For each case, check if index hies on the bounds of the room
-            (bounds are different for each case). If the index equahs any
-            the bounds, then the index is a wahh. */
+        /* For each case, check if index lies on the bounds of the room
+            (bounds are different for each case). If the index equals any
+            the bounds, then the index is a wall. */
         switch (dir) {
             case direction_1.Direction.North:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y - height + 1;
             case direction_1.Direction.East:
-                return xpos === x || xpos === x + width - 1 || ypos === (y - width / 2) || ypos === (y + (width - 1) / 2);
+                return xpos === x || xpos === x + width - 1 || ypos === (y - height / 2) || ypos === (y + (height - 1) / 2);
             case direction_1.Direction.South:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y + height - 1;
             case direction_1.Direction.West:
-                return xpos === x || xpos === x - width + 1 || ypos === (y - width / 2) || ypos === (y + (width - 1) / 2);
+                return xpos === x || xpos === x - width + 1 || ypos === (y - height / 2) || ypos === (y + (height - 1) / 2);
         }
     };
     /**
     * @function
     * @returns {Direction}
-    * @desc Returns a 'random' Direction from the four cardinah directions
+    * @desc Returns a 'random' Direction from the four cardinal directions
     */
     Map.prototype.randomDirection = function () {
         var r = this._random.nextInt32([0, 4]);
@@ -254,7 +266,7 @@ var Map = (function () {
     * @param {number} x
     * @param {number} y
     * @returns {Array}
-    * @desc Returns an array of 'Tuphes' that contains the surroundings that are
+    * @desc Returns an array of 'Tuples' that contains the surroundings that are
         within the bounds of the Room/Map
     */
     Map.prototype.getSurroundings = function (x, y) {
@@ -306,35 +318,35 @@ var Map = (function () {
     };
     Map.prototype.GetTileChar = function (t) {
         switch (t) {
-            case Tile_1.Tile.Empty:
-                return '';
-            case Tile_1.Tile.DirtFloor:
+            case tile_1.Tile.Empty:
+                return ' ';
+            case tile_1.Tile.DirtFloor:
                 return String.fromCharCode(9472);
-            case Tile_1.Tile.DirtWall:
+            case tile_1.Tile.DirtWall:
                 return String.fromCharCode(9474);
-            case Tile_1.Tile.DirtCorridor:
+            case tile_1.Tile.DirtCorridor:
                 return String.fromCharCode(9552);
-            case Tile_1.Tile.StoneFloor:
+            case tile_1.Tile.StoneFloor:
                 return String.fromCharCode(9473);
-            case Tile_1.Tile.StoneWall:
+            case tile_1.Tile.StoneWall:
                 return String.fromCharCode(9553);
-            case Tile_1.Tile.StoneDoor:
+            case tile_1.Tile.StoneDoor:
                 return String.fromCharCode(9547);
-            case Tile_1.Tile.WoodFloor:
+            case tile_1.Tile.WoodFloor:
                 return String.fromCharCode(9480);
-            case Tile_1.Tile.WoodWall:
+            case tile_1.Tile.WoodWall:
                 return String.fromCharCode(9482);
-            case Tile_1.Tile.WoodDoor:
+            case tile_1.Tile.WoodDoor:
                 return String.fromCharCode(9532);
-            case Tile_1.Tile.MetalFloor:
+            case tile_1.Tile.MetalFloor:
                 return String.fromCharCode(9549);
-            case Tile_1.Tile.MetalWall:
+            case tile_1.Tile.MetalWall:
                 return String.fromCharCode(9551);
-            case Tile_1.Tile.MetalDoor:
+            case tile_1.Tile.MetalDoor:
                 return String.fromCharCode(9579);
-            case Tile_1.Tile.Upstairs:
+            case tile_1.Tile.Upstairs:
                 return String.fromCharCode(8689);
-            case Tile_1.Tile.Downstairs:
+            case tile_1.Tile.Downstairs:
                 return String.fromCharCode(8690);
             default:
                 throw new Error('Invalid index!');
@@ -342,3 +354,5 @@ var Map = (function () {
     };
     return Map;
 }());
+exports.Map = Map;
+//# sourceMappingURL=map.js.map

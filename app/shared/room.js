@@ -1,3 +1,4 @@
+"use strict";
 var direction_1 = require('./direction');
 var square_1 = require('./square');
 var Room = (function () {
@@ -15,6 +16,7 @@ var Room = (function () {
         this._W = w;
         this._L = l;
         this._dir = d;
+        this._room = new Array(0);
         this.createRoom();
     }
     /**
@@ -22,19 +24,18 @@ var Room = (function () {
     * @desc Creates a room based off a Direction
     */
     Room.prototype.createRoom = function () {
-        this._room = square_1.Square[this._W * this._L];
         var xS = 0;
         var yS = 0;
         switch (this._dir) {
             case this._dir = direction_1.Direction.North:
                 for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
-                    for (yS = this._y; yS < this._y - this._L; yS++) {
+                    for (yS = this._y; yS > this._y - this._L - 1; yS--) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = direction_1.Direction.East:
-                for (xS = this._x; xS < this._x + this._W; xS++) {
+                for (xS = this._x; xS < this._x + this._W + 1; xS++) {
                     for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
@@ -42,13 +43,13 @@ var Room = (function () {
                 break;
             case this._dir = direction_1.Direction.South:
                 for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
-                    for (yS = this._y; yS < this._y + this._L; yS++) {
+                    for (yS = this._y; yS < this._y + this._L + 1; yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = direction_1.Direction.West:
-                for (xS = this._x; xS < this._x - this._W; xS++) {
+                for (xS = this._x; xS > this._x - this._W - 1; xS--) {
                     for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
@@ -76,7 +77,7 @@ var Room = (function () {
     * @desc Gets upper bound of room
     */
     Room.prototype.getUpperBounds = function (i, len) {
-        return i + len / 2;
+        return i + (len + 1) / 2;
     };
     Object.defineProperty(Room.prototype, "room", {
         /**
@@ -91,3 +92,4 @@ var Room = (function () {
     return Room;
 }());
 exports.Room = Room;
+//# sourceMappingURL=room.js.map

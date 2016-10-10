@@ -1,4 +1,4 @@
-var Tile;
+"use strict";
 (function (Tile) {
     Tile[Tile["DirtFloor"] = 0] = "DirtFloor";
     Tile[Tile["DirtWall"] = 1] = "DirtWall";
@@ -18,5 +18,6 @@ var Tile;
     Tile[Tile["Upstairs"] = 15] = "Upstairs";
     Tile[Tile["Downstairs"] = 16] = "Downstairs";
     Tile[Tile["Empty"] = 17] = "Empty";
-})(Tile || (Tile = {}));
-exports.Tile = Tile;
+})(exports.Tile || (exports.Tile = {}));
+var Tile = exports.Tile;
+//# sourceMappingURL=tile.js.map

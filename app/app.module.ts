@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { BaseComponent } from './base.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { generatorServices } from './shared/generator-shared.module'; 
 import { routing } from './app-routing.module';
 
 @NgModule({
@@ -15,11 +14,11 @@ import { routing } from './app-routing.module';
         HttpModule,
         routing,
     ],
-    declarations: [ 
+    declarations: [
         BaseComponent,
-        DashboardComponent 
+        DashboardComponent
     ],
-    providers: [ generatorServices ],
+    providers: [ /* Data services will go here */ ],
     bootstrap: [ BaseComponent ],
 })
 export class AppModule { }

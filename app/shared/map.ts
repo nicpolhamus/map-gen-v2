@@ -58,11 +58,11 @@ export class Map {
             let valid: Direction = null;
             /* attempt to create a valid piece of content over 1000 iterations */
             for (innerTries = 0; innerTries < 1000; innerTries++) {
-                x = this._random.nextInt32([0,100]);
-                y = this._random.nextInt32([0,100]);
+                x = this._random.nextInt32([0, 100]);
+                y = this._random.nextInt32([0, 100]);
                 /* Check if index can be utilized (logic here will be modified later)*/
-                if (this._map[x+this._w*y] === Tile.DirtWall || this._map[x+this._w*y] === Tile.DirtCorridor) {
-                    let surroundings: [Square, Direction, Tile][] = this.getSurroundings(x,y);
+                if (this._map[x + this._w * y] === Tile.DirtWall || this._map[x + this._w * y] === Tile.DirtCorridor) {
+                    let surroundings: [Square, Direction, Tile][] = this.getSurroundings(x, y);
 
                     /* check if index can be reached */
                     let reachable: [Square, Direction, Tile] = null;
@@ -75,6 +75,7 @@ export class Map {
                             break;
                         }
                     }
+                    if (reachable === null) { continue; }
                     valid = reachable[1];
                     /* Setting the coordinate modifiers based on direction of reachable */
                     switch (reachable[1]) {
@@ -99,13 +100,13 @@ export class Map {
                     }
                     /* check to see if surroundings of entrance for doors, so we
                         don't have a bunch of Doors around each other*/
-                    if (this.getTile(x,y+1) === Tile.WoodDoor) { //North check
+                    if (this.getTile(x, y + 1) === Tile.WoodDoor) { //North check
                         valid = null;
-                    } else if (this.getTile(x-1,y) === Tile.WoodDoor) { //East check
+                    } else if (this.getTile(x - 1, y) === Tile.WoodDoor) { //East check
                         valid = null;
-                    } else if (this.getTile(x,y-1) === Tile.WoodDoor) { //South check
+                    } else if (this.getTile(x, y - 1) === Tile.WoodDoor) { //South check
                         valid = null;
-                    } else if (this.getTile(x+1,y) === Tile.WoodDoor) { //West Check
+                    } else if (this.getTile(x + 1, y) === Tile.WoodDoor) { //West Check
                         valid = null;
                     }
                     /* if the square is still valid, we break out*/
@@ -114,13 +115,13 @@ export class Map {
                 /* we will make a room at the valid square */
                 if (valid !== null) {
                     /* attemp to make a room at valid square */
-                    if (this.makeRoom(x+xmd,y+ymd,valid)) {
+                    if (this.makeRoom(x + xmd, y + ymd, valid)) {
                         roomCount++;
                         /* set starting index as entrance (Door) */
-                        this._map[x+this._w*y] = Tile.WoodDoor;
+                        this._map[x + this._w * y] = Tile.WoodDoor;
                         /* set the index in front of entrance to a floor Tile,
                             ensuring that we can reach the entrance of the room */
-                        this._map[(x+xmd)+this._w*(y+ymd)] = Tile.DirtFloor;
+                        this._map[(x + xmd) + this._w * (y + ymd)] = Tile.DirtFloor;
                     }
                 }
             }
@@ -128,13 +129,13 @@ export class Map {
         /* Will include a function for adding room content */
         /* Will include a logger for debugging purposes, for now using
             Console.log */
-        console.log('# of rooms '+roomCount);
+        console.log('# of rooms ' + roomCount);
     }
     toString(): string {
         let d_string: string = '';
-        for(let y = 0, x = 0; y < this._h; y++) {
-            for(x = 0; x < this._w; x++) {
-                d_string += this.GetTileChar(this._map[x+this._w*y]);
+        for (let y = 0, x = 0; y < this._h; y++) {
+            for (x = 0; x < this._w; x++) {
+                d_string += this.GetTileChar(this._map[x + this._w * y]);
             }
             d_string += '\n';
         }
@@ -183,7 +184,7 @@ export class Map {
         * @todo implement a more efficient approach
         */
         room.room.forEach((vah) => {
-            if (vah.y < 0 || vah.y > mapLength || vah.x < 0 || vah.x > mapWidth || (mapMap[vah.x + mapWidth* vah.y]) !== Tile.Empty) {
+            if (vah.y < 0 || vah.y > mapLength || vah.x < 0 || vah.x > mapWidth || (mapMap[vah.x + mapWidth * vah.y]) !== Tile.Empty) {
                 result = false;
             }
         });
@@ -193,11 +194,18 @@ export class Map {
         * @todo modify functionality to access more Tile types
         */
         if (result !== false) {
-            for (let i = 0; i < room.room.length; i++) {
-                let pos = room.room[i].x + mapWidth * room.room[i].y;
-                this._map[pos] = this.isWall(x, y, mapWidth, mapLength, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
-            }
+            room.room.forEach((point) => {
+                let pos = point.x + mapWidth * point.y;
+                this._map[pos] = this.isWall(x, y, width, height, point.x, point.y, dir) ? Tile.DirtWall : Tile.DirtFloor;
+            })
         }
+
+        // if (result !== false) {
+        //     for (let i = 0; i < room.room.length; i++) {
+        //         let pos = room.room[i].x + mapWidth * room.room[i].y;
+        //         this._map[pos] = this.isWall(x, y, width, height, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
+        //     }
+        // }
         return result;
     }
     /**
@@ -220,11 +228,11 @@ export class Map {
             case Direction.North:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y - height + 1;
             case Direction.East:
-                return xpos === x || xpos === x + width - 1 || ypos === (y - width / 2) || ypos === (y + (width - 1) / 2);
+                return xpos === x || xpos === x + width - 1 || ypos === (y - height / 2) || ypos === (y + (height - 1) / 2);
             case Direction.South:
                 return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y + height - 1;
             case Direction.West:
-                return xpos === x || xpos === x - width + 1 || ypos === (y - width / 2) || ypos === (y + (width - 1) / 2);
+                return xpos === x || xpos === x - width + 1 || ypos === (y - height / 2) || ypos === (y +  (height - 1) / 2);
         }
     }
     /**
@@ -253,17 +261,17 @@ export class Map {
     * @desc Returns an array of 'Tuples' that contains the surroundings that are
         within the bounds of the Room/Map
     */
-    private getSurroundings(x: number, y: number): [Square,Direction,Tile][] {
+    private getSurroundings(x: number, y: number): [Square, Direction, Tile][] {
         /* Sets the surroundings of the index */
         let surroundings: [Square, Direction][] = [
-            [new Square(x,y+1),Direction.North],
-            [new Square(x-1,y),Direction.East],
-            [new Square(x,y-1),Direction.South],
-            [new Square(x+1,y),Direction.West]
+            [new Square(x, y + 1), Direction.North],
+            [new Square(x - 1, y), Direction.East],
+            [new Square(x, y - 1), Direction.South],
+            [new Square(x + 1, y), Direction.West]
         ];
         /* hoops through the surroundings and checks if each index is within
             the bounds of the Room/map */
-        let surroundingsInBounds: [Square,Direction][] = [];
+        let surroundingsInBounds: [Square, Direction][] = [];
         for (let i = 0; i < surroundings.length; i++) {
             let s: Square = surroundings[i][0];
             if (s.x > 0 && s.x < this._w && s.y > 0 && s.y < this._h) {
@@ -271,13 +279,13 @@ export class Map {
             }
         }
         /* Sets the Tile for each surrounding index that are within the bounds */
-        let surroundingsWithTiles: [Square,Direction,Tile][] = [];
+        let surroundingsWithTiles: [Square, Direction, Tile][] = [];
         for (let i = 0; i < surroundingsInBounds.length; i++) {
             surroundingsWithTiles.push([
                 surroundingsInBounds[i][0],
                 surroundingsInBounds[i][1],
                 /* Gets the Tile */
-                this.getTile(surroundingsInBounds[i][0].x,surroundingsInBounds[i][0].y)
+                this.getTile(surroundingsInBounds[i][0].x, surroundingsInBounds[i][0].y)
             ]);
         }
         return surroundingsWithTiles;
@@ -292,10 +300,10 @@ export class Map {
     private getTile(x: number, y: number): Tile {
         /* Uses a try-catch to catch an index that is out of range */
         try {
-            return this._map[x+this._w*y];
+            return this._map[x + this._w * y];
         } catch (e) {
             if (e instanceof RangeError) {
-                throw new Error(x+','+y+' is out of range');
+                throw new Error(x + ',' + y + ' is out of range');
             }
         }
     }

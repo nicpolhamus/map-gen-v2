@@ -1,3 +1,4 @@
+"use strict";
 /**
  * copied almost directly from Mersenne Twister implementation found in https://gist.github.com/banksean/300494
  * all rights reserved to him.
@@ -103,3 +104,4 @@ var Random = (function () {
     return Random;
 }());
 exports.Random = Random;
+//# sourceMappingURL=random.js.map
