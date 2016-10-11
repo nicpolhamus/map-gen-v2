@@ -29,13 +29,13 @@ var Room = (function () {
         switch (this._dir) {
             case this._dir = direction_1.Direction.North:
                 for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
-                    for (yS = this._y; yS > this._y - this._L - 1; yS--) {
+                    for (yS = this._y; yS > this._y - this._L; yS--) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = direction_1.Direction.East:
-                for (xS = this._x; xS < this._x + this._W + 1; xS++) {
+                for (xS = this._x; xS < this._x + this._W; xS++) {
                     for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
@@ -43,13 +43,13 @@ var Room = (function () {
                 break;
             case this._dir = direction_1.Direction.South:
                 for (xS = this.getLowerBounds(this._x, this._W); xS < this.getUpperBounds(this._x, this._W); xS++) {
-                    for (yS = this._y; yS < this._y + this._L + 1; yS++) {
+                    for (yS = this._y; yS < this._y + this._L; yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
                 }
                 break;
             case this._dir = direction_1.Direction.West:
-                for (xS = this._x; xS > this._x - this._W - 1; xS--) {
+                for (xS = this._x; xS > this._x - this._W; xS--) {
                     for (yS = this.getLowerBounds(this._y, this._L); yS < this.getUpperBounds(this._y, this._L); yS++) {
                         this._room.push(new square_1.Square(xS, yS));
                     }
