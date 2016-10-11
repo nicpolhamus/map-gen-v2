@@ -13,7 +13,7 @@ import { Random } from '../shared/random';
     templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent {
-    public map: string = '';
+    public mapString: string = '';
     width: number;
     length: number;
     rooms: number;
@@ -21,6 +21,6 @@ export class DashboardComponent {
     generateMap(l: number = 20, w: number = 80, r: number = 25): void {
         let map = new Map(w,l,r);
         map.createMap();
-        console.log(map.toString());
+        this.mapString = map.toString();
     }
 }
