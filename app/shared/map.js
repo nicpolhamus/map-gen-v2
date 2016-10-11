@@ -64,8 +64,8 @@ var Map = (function () {
             var valid = null;
             /* attempt to create a valid piece of content over 1000 iterations */
             for (innerTries = 0; innerTries < 1000; innerTries++) {
-                x = this._random.nextInt32([0, 100]);
-                y = this._random.nextInt32([0, 100]);
+                x = this._random.nextInt32([0, this._w - 1]);
+                y = this._random.nextInt32([0, this._h - 1]);
                 /* Check if index can be utilized (logic here will be modified later)*/
                 if (this._map[x + this._w * y] === tile_1.Tile.DirtWall || this._map[x + this._w * y] === tile_1.Tile.DirtCorridor) {
                     var surroundings = this.getSurroundings(x, y);
@@ -124,17 +124,17 @@ var Map = (function () {
                         break;
                     }
                 }
-                /* we will make a room at the valid square */
-                if (valid !== null) {
-                    /* attemp to make a room at valid square */
-                    if (this.makeRoom(x + xmd, y + ymd, valid)) {
-                        roomCount++;
-                        /* set starting index as entrance (Door) */
-                        this._map[x + this._w * y] = tile_1.Tile.WoodDoor;
-                        /* set the index in front of entrance to a floor Tile,
-                            ensuring that we can reach the entrance of the room */
-                        this._map[(x + xmd) + this._w * (y + ymd)] = tile_1.Tile.DirtFloor;
-                    }
+            }
+            /* we will make a room at the valid square */
+            if (valid !== null) {
+                /* attemp to make a room at valid square */
+                if (this.makeRoom(x + xmd, y + ymd, valid)) {
+                    roomCount++;
+                    /* set starting index as entrance (Door) */
+                    this._map[x + this._w * y] = tile_1.Tile.WoodDoor;
+                    /* set the index in front of entrance to a floor Tile,
+                        ensuring that we can reach the entrance of the room */
+                    this._map[(x + xmd) + this._w * (y + ymd)] = tile_1.Tile.DirtFloor;
                 }
             }
         }
@@ -145,13 +145,13 @@ var Map = (function () {
     };
     Map.prototype.toString = function () {
         var d_string = '';
-        for (var y = 0, x = 0; y < this._h; y++) {
-            for (x = 0; x < this._w; x++) {
+        for (var y = 0; y < this._h; y++) {
+            for (var x = 0; x < this._w; x++) {
                 d_string += this.GetTileChar(this._map[x + this._w * y]);
             }
             d_string += '\n';
         }
-        return d_string;
+        return d_string.trim();
     };
     /**
     * @function
@@ -159,11 +159,14 @@ var Map = (function () {
         inner indicies are set to 'Empty'.
     */
     Map.prototype.init = function () {
-        for (var y = 0, x = 0; y < this._h; y++) {
-            for (x = 0; x < this._w; x++) {
-                (y === 0 || y === this._h - 1 || x === 0 || x === this._w - 1) ?
-                    this._map[x + this._w * y] = tile_1.Tile.StoneWall :
+        for (var y = 0; y < this._h; y++) {
+            for (var x = 0; x < this._w; x++) {
+                if (y === 0 || y === this._h - 1 || x === 0 || x === this._w - 1) {
+                    this._map[x + this._w * y] = tile_1.Tile.StoneWall;
+                }
+                else {
                     this._map[x + this._w * y] = tile_1.Tile.Empty;
+                }
             }
         }
     };
@@ -193,7 +196,7 @@ var Map = (function () {
             room, or if the index Tile type isn't 'Empty'
         * @todo implement a more efficient approach
         */
-        room.room.forEach(function (vah) {
+        innerRoom.forEach(function (vah) {
             if (vah.y < 0 || vah.y > mapLength || vah.x < 0 || vah.x > mapWidth || (mapMap[vah.x + mapWidth * vah.y]) !== tile_1.Tile.Empty) {
                 result = false;
             }
@@ -202,18 +205,12 @@ var Map = (function () {
         * Sets each index of Room._map to either a DirtWall or a DirtFloor
         * @todo modify functionality to access more Tile types
         */
-        if (result !== false) {
-            room.room.forEach(function (point) {
+        if (result) {
+            innerRoom.forEach(function (point) {
                 var pos = point.x + mapWidth * point.y;
                 _this._map[pos] = _this.isWall(x, y, width, height, point.x, point.y, dir) ? tile_1.Tile.DirtWall : tile_1.Tile.DirtFloor;
             });
         }
-        // if (result !== false) {
-        //     for (let i = 0; i < room.room.length; i++) {
-        //         let pos = room.room[i].x + mapWidth * room.room[i].y;
-        //         this._map[pos] = this.isWall(x, y, width, height, room.room[i].x, room.room[i].y, dir) ? Tile.DirtWall : Tile.DirtFloor;
-        //     }
-        // }
         return result;
     };
     /**
@@ -234,13 +231,13 @@ var Map = (function () {
             the bounds, then the index is a wall. */
         switch (dir) {
             case direction_1.Direction.North:
-                return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y - height + 1;
+                return xpos === (x - width / 2) || xpos === Math.round((x + (width - 1) / 2)) || ypos === y || ypos === y - height + 1;
             case direction_1.Direction.East:
-                return xpos === x || xpos === x + width - 1 || ypos === (y - height / 2) || ypos === (y + (height - 1) / 2);
+                return xpos === x || xpos === x + width - 1 || ypos === (y - height / 2) || ypos === Math.round((y + (height - 1) / 2));
             case direction_1.Direction.South:
-                return xpos === (x - width / 2) || xpos === (x + (width - 1) / 2) || ypos === y || ypos === y + height - 1;
+                return xpos === (x - width / 2) || xpos === Math.round((x + (width - 1) / 2)) || ypos === y || ypos === y + height - 1;
             case direction_1.Direction.West:
-                return xpos === x || xpos === x - width + 1 || ypos === (y - height / 2) || ypos === (y + (height - 1) / 2);
+                return xpos === x || xpos === x - width + 1 || ypos === (y - height / 2) || ypos === Math.round((y + (height - 1) / 2));
         }
     };
     /**
