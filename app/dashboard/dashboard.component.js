@@ -12,7 +12,7 @@ var core_1 = require('@angular/core');
 var map_1 = require('../shared/map');
 var DashboardComponent = (function () {
     function DashboardComponent() {
-        this.map = '';
+        this.mapString = '';
     }
     DashboardComponent.prototype.generateMap = function (l, w, r) {
         if (l === void 0) { l = 20; }
@@ -20,7 +20,7 @@ var DashboardComponent = (function () {
         if (r === void 0) { r = 25; }
         var map = new map_1.Map(w, l, r);
         map.createMap();
-        console.log(map.toString());
+        this.mapString = map.toString();
     };
     DashboardComponent = __decorate([
         core_1.Component({
