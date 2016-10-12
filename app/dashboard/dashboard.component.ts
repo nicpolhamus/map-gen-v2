@@ -14,13 +14,14 @@ import { Random } from '../shared/random';
 })
 export class DashboardComponent {
     public mapString: string = '';
-    width: number;
-    length: number;
-    rooms: number;
+    width: number = 0;
+    length: number = 0;
+    rooms: number = 0;
     constructor() {}
-    generateMap(l: number = 20, w: number = 80, r: number = 25): void {
-        let map = new Map(w,l,r);
+    generateMap(l, w, r): void {
+        let map = new Map(Number.parseInt(w),Number.parseInt(l),Number.parseInt(r));
         map.createMap();
+        console.log(map);
         this.mapString = map.toString();
     }
 }
