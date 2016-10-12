@@ -13,13 +13,14 @@ var map_1 = require('../shared/map');
 var DashboardComponent = (function () {
     function DashboardComponent() {
         this.mapString = '';
+        this.width = 0;
+        this.length = 0;
+        this.rooms = 0;
     }
     DashboardComponent.prototype.generateMap = function (l, w, r) {
-        if (l === void 0) { l = 20; }
-        if (w === void 0) { w = 80; }
-        if (r === void 0) { r = 25; }
-        var map = new map_1.Map(w, l, r);
+        var map = new map_1.Map(Number.parseInt(w), Number.parseInt(l), Number.parseInt(r));
         map.createMap();
+        console.log(map);
         this.mapString = map.toString();
     };
     DashboardComponent = __decorate([
