@@ -2,11 +2,8 @@ language: node_js
 node_js:
   - "6.0.0"
 
-before_script:
-  - npm install
 script:
-  - npm start
-  
+  - npm install
 
 deploy:
   provider: heroku
@@ -14,3 +11,5 @@ deploy:
   app: typescript-rogue-mapper
   on:
     all_branches: true
+  run:
+    - npm start
