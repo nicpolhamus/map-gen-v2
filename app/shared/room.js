@@ -67,7 +67,7 @@ var Room = (function () {
     * @desc Gets lower bound of room
     */
     Room.prototype.getLowerBounds = function (i, len) {
-        return i - len / 2;
+        return Math.floor(i - len / 2);
     };
     /**
     * @function getUpperBounds
@@ -77,7 +77,7 @@ var Room = (function () {
     * @desc Gets upper bound of room
     */
     Room.prototype.getUpperBounds = function (i, len) {
-        return i + (len + 1) / 2;
+        return Math.floor(i + (len + 1) / 2);
     };
     Object.defineProperty(Room.prototype, "room", {
         /**
