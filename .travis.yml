@@ -11,5 +11,3 @@ deploy:
   app: typescript-rogue-mapper
   on:
     all_branches: true
-  run:
-    - npm start
