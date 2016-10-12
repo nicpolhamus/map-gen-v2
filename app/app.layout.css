@@ -1,4 +1,20 @@
 /* Custom Styles will go here */
+
 .body {
     background-color: #94938f;
+}
+
+.map {
+    border: 4px dashed #999;
+    border-radius: 4px;
+    background-color: #333;
+    color: #999;
+    margin: auto;
+    padding-top: auto;
+    padding-left: auto;
+    padding-right: auto;
+    padding-bottom: auto;
+    height: relative;
+    width: relative;
+    font-family: 'Courier New', Courier, monospace
 }
