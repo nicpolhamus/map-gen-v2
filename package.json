@@ -2,14 +2,13 @@
   "name": "map-gen-v2",
   "version": "1.0.0",
   "engines": {
-    "node": "5.12.0",
-    "npm": "3.8.6"
+    "node": "5.12.0"
   },
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"lite-server\" ",
+    "start": "node ./server/server.js",
+    "test": "concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
     "postinstall": "typings install",
-    "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings"
   },
@@ -27,10 +26,12 @@
     "angular-in-memory-web-api": "~0.1.1",
     "bootstrap": "^4.0.0-alpha.4",
     "core-js": "^2.4.1",
+    "express": "^4.14.0",
     "octicons": "^4.4.0",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.39",
+    "winston": "^2.2.0",
     "zone.js": "^0.6.25",
     "typings": "^1.4.0"
   },
