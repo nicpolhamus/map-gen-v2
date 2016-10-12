@@ -1,0 +1,13 @@
+language: node_js
+node:
+  - "6"
+
+script:
+  - npm install
+
+deploy:
+  provider: heroku
+  api_key: 1848b0a2-8601-4228-8e9f-4dff65fe47d5
+  app: typescript-rogue-mapper
+  on:
+    all_branches: true
