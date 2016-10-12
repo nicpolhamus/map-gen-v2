@@ -32,7 +32,7 @@
         res.send(rootPath + 'index.html');
     });
 
-    app.listen(process.env.port || 3000, function () {
-        (process.env.port) ? console.log('Listening on port ' + process.env.port) : console.log('Listening on port 3000');
+    app.listen(process.env.PORT, function () {
+        console.log('Listening on port ' + process.env.PORT);
     });
 })();
