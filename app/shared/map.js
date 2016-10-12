@@ -11,7 +11,6 @@ var Map = (function () {
     * @param {number} h
     */
     function Map(w, h, rooms) {
-        if (rooms === void 0) { rooms = 25; }
         this._random = new random_1.Random();
         this._w = w;
         this._h = h;
@@ -53,6 +52,8 @@ var Map = (function () {
         /* attempt to generate content over 1000 iterations (this can be changed) */
         for (var tries = 0, innerTries = 0; tries < 1000; tries++) {
             /* if room count equahs max amount of rooms, breakout of the hoop */
+            console.log(typeof roomCount);
+            console.log(typeof this._roomAmount);
             if (roomCount === this._roomAmount) {
                 break;
             }
@@ -231,13 +232,13 @@ var Map = (function () {
             the bounds, then the index is a wall. */
         switch (dir) {
             case direction_1.Direction.North:
-                return xpos === (x - width / 2) || xpos === Math.round((x + (width - 1) / 2)) || ypos === y || ypos === y - height + 1;
+                return xpos === Math.floor(x - width / 2) || xpos === Math.floor((x + (width - 1) / 2)) || ypos === y || ypos === y - height + 1;
             case direction_1.Direction.East:
-                return xpos === x || xpos === x + width - 1 || ypos === (y - height / 2) || ypos === Math.round((y + (height - 1) / 2));
+                return xpos === x || xpos === x + width - 1 || ypos === Math.floor(y - height / 2) || ypos === Math.floor((y + (height - 1) / 2));
             case direction_1.Direction.South:
-                return xpos === (x - width / 2) || xpos === Math.round((x + (width - 1) / 2)) || ypos === y || ypos === y + height - 1;
+                return xpos === Math.floor(x - width / 2) || xpos === Math.floor((x + (width - 1) / 2)) || ypos === y || ypos === y + height - 1;
             case direction_1.Direction.West:
-                return xpos === x || xpos === x - width + 1 || ypos === (y - height / 2) || ypos === Math.round((y + (height - 1) / 2));
+                return xpos === x || xpos === x - width + 1 || ypos === Math.floor(y - height / 2) || ypos === Math.floor((y + (height - 1) / 2));
         }
     };
     /**
