@@ -82,7 +82,7 @@ export class Room {
     * @desc Gets lower bound of room
     */
     private getLowerBounds(i: number, len: number): number {
-        return i - len / 2;
+        return Math.floor(i - len / 2);
     }
     /**
     * @function getUpperBounds
@@ -92,7 +92,7 @@ export class Room {
     * @desc Gets upper bound of room
     */
     private getUpperBounds(i: number, len: number): number {
-        return i + (len + 1) / 2;
+        return Math.floor(i + (len + 1) / 2);
     }
 
     /**
