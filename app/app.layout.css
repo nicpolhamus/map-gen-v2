@@ -1,5 +1,23 @@
 /* Custom Styles will go here */
 
+@media (min-width: 320px) {
+    .router {
+        margin-top: 25%;
+    }
+}
+
+@media (min-width: 767px) {
+    .router {
+        margin-top: 10%;
+    }
+}
+
+@media (min-width: 992px) {
+    .router {
+        margin-top: 6.25%;
+    }
+}
+
 .body {
     background-color: #94938f;
 }
