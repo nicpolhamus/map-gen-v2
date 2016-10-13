@@ -1,37 +1,112 @@
 <div class="container-fluid">
     <div class="card text-xs-center">
         <div class="card-header">
-            <div class="row">
-                <div class="col-sm-2 offset-sm-2">
+            <div class="row hidden-md-down">
+                <div class="col-xs-2 offset-lg-1">
                     <button type="button" class="btn btn-primary" (click)="generateMap(length,width,rooms)">
                         Generate Map
                     </button>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="length-addon">
-                            Map Length
+                            Length
                         </span>
-                        <input type="text" class="form-control" [(ngModel)]="length"
-                            placeholder="20" aria-describedby="length-addon">
+                        <input type="text" class="form-control" [(ngModel)]="length" placeholder="20" aria-describedby="length-addon">
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="width-addon">
-                            Map Width
+                            Width
                         </span>
-                        <input type="text" class="form-control" [(ngModel)]="width"
-                            placeholder="80" aria-describedby="width-addon">
+                        <input type="text" class="form-control" [(ngModel)]="width" placeholder="80" aria-describedby="width-addon">
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="rooms-addon">
-                            Amount of Rooms
+                            Rooms
                         </span>
-                        <input type="text" class="form-control" [(ngModel)]="rooms"
-                            placeholder="25" aria-describedby="rooms-addon">
+                        <input type="text" class="form-control" [(ngModel)]="rooms" placeholder="25" aria-describedby="rooms-addon">
+                    </div>
+                </div>
+            </div>
+            <div class="hidden-lg-up hidden-sm-down">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-primary" (click)="generateMap(length,width,rooms)">
+                            Generate Map
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-2 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="length-addon">
+                                Length
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="length" placeholder="20" aria-describedby="length-addon">
+                        </div>
+                    </div>
+                    <div class="col-xs-2 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="width-addon">
+                                Width
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="width" placeholder="80" aria-describedby="width-addon">
+                        </div>
+                    </div>
+                    <div class="col-xs-2 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="rooms-addon">
+                                Rooms
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="rooms" placeholder="25" aria-describedby="rooms-addon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden-md-up">
+                <div class="row">
+                    <div class="col-xs-2 offset-xs-2">
+                        <button type="button" class="btn btn-primary" (click)="generateMap(length,width,rooms)">
+                            Generate Map
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-8 offset-xs-2">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="length-addon">
+                                Length
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="length" placeholder="20" aria-describedby="length-addon">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-8 offset-xs-2">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="width-addon">
+                                Width
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="width" placeholder="80" aria-describedby="width-addon">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-8 offset-xs-2">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="rooms-addon">
+                                Rooms
+                            </span>
+                            <input type="text" class="form-control" [(ngModel)]="rooms" placeholder="25" aria-describedby="rooms-addon">
+                        </div>
                     </div>
                 </div>
             </div>
