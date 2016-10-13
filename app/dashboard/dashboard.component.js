@@ -20,7 +20,6 @@ var DashboardComponent = (function () {
     DashboardComponent.prototype.generateMap = function (l, w, r) {
         var map = new map_1.Map(Number.parseInt(w), Number.parseInt(l), Number.parseInt(r));
         map.createMap();
-        console.log(map);
         this.mapString = map.toString();
     };
     DashboardComponent = __decorate([
