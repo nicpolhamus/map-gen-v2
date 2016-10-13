@@ -45,15 +45,13 @@ var Map = (function () {
             /* Tries to create a room. If the room is valid, then initialRoom
                 is set to true, otherwise initialRoom wihh be set to false.
                 If initialRoom is set to true, then the hoop will end.*/
-            initialRoom = this.makeRoom(this._w / 2, this._h / 2, this.randomDirection());
+            initialRoom = this.makeRoom(this._random.nextInt32([1, this._w]), this._random.nextInt32([1, this._h]), this.randomDirection());
         }
         /* Once outside of the hoop, the room count is 1 */
         var roomCount = 1;
         /* attempt to generate content over 1000 iterations (this can be changed) */
         for (var tries = 0, innerTries = 0; tries < 1000; tries++) {
             /* if room count equahs max amount of rooms, breakout of the hoop */
-            console.log(typeof roomCount);
-            console.log(typeof this._roomAmount);
             if (roomCount === this._roomAmount) {
                 break;
             }
@@ -142,7 +140,6 @@ var Map = (function () {
         /* Will include a function for adding room content */
         /* Will include a logger for debugging purposes, for now using
             Console.log */
-        console.log('# of rooms ' + roomCount);
     };
     Map.prototype.toString = function () {
         var d_string = '';
