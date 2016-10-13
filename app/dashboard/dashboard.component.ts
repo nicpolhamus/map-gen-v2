@@ -21,7 +21,6 @@ export class DashboardComponent {
     generateMap(l, w, r): void {
         let map = new Map(Number.parseInt(w),Number.parseInt(l),Number.parseInt(r));
         map.createMap();
-        console.log(map);
         this.mapString = map.toString();
     }
 }
