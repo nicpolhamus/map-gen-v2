@@ -2,7 +2,8 @@
 
 ---
 
-This is the Second version of my Rogue Generator, which is written in [Typescript](http://www.typescriptlang.org/).
+This is the Second version of my Rogue Generator, which is written in [Typescript](http://www.typescriptlang.org/). 
+It uses [SystemJS](https://github.com/systemjs/systemjs) to transcribe from es6 to es5.
 
 The algorithm used for map generation is based off of this [C# Example](http://www.roguebasin.com/index.php?title=CSharp_Example_of_a_Dungeon-Building_Algorithm) 
 from [roguebasin](http://www.roguebasin.com/index.php?title=Main_Page).  
@@ -11,6 +12,5 @@ from [roguebasin](http://www.roguebasin.com/index.php?title=Main_Page).
 
 - [Angular 2](https://angular.io/)
 - [Bootstrap 4 Alpha](http://v4-alpha.getbootstrap.com/)
-- [SystemJS](https://github.com/systemjs/systemjs)
 - [NodeJS](https://nodejs.org/en/)
 - [ExpressJS](http://expressjs.com/)
