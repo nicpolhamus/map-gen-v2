@@ -2,7 +2,7 @@
 
 ---
 
-This is the Second version of my Rogue Generator is written in [Typescript](http://www.typescriptlang.org/)
+This is the Second version of my Rogue Generator, which is written in [Typescript](http://www.typescriptlang.org/).
 
 The algorithm used for map generation is based off of this [C# Example](http://www.roguebasin.com/index.php?title=CSharp_Example_of_a_Dungeon-Building_Algorithm) 
 from [roguebasin](http://www.roguebasin.com/index.php?title=Main_Page).  
