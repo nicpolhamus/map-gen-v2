@@ -40,11 +40,11 @@ export class DashboardComponent {
         let valid: boolean = false;
         this.validationText = '';
         if (l > 0 && w > 0 && r > 0) {
-            if (l > 200) {
+            if (l >= 200) {
                 this.validationText += 'Length needs to be less than 200!' + '\n';
-            } if (w > 200) {
+            } if (w >= 200) {
                 this.validationText += 'Width needs to be less than 200!' + '\n';
-            } if (r > ((l+w)/2)) {
+            } if (r >= ((l+w)/2) || r >= 200) {
                 this.validationText += 'Rooms need to be less than Length + Width divided by two!' + '\n';
             } else {
                 valid = true;
