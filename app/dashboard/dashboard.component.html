@@ -117,4 +117,17 @@
             <pre class="card-text map" *ngIf="mapString">{{mapString}}</pre>
         </div>
     </div>
+    <div class="modal fade" id="validation-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-warning">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                        <span>&times;</span>
+                    </button>
+                    <h4>Incorrect Input! </h4>
+                    <p>{{validationText}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
